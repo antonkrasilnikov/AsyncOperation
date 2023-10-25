@@ -124,4 +124,18 @@ open class AsyncOperationQueue {
         operation.name = name
         _queue.addOperation(operation)
     }
+
+    public func addOperation(_ operation: AsyncOperation) {
+        let block = operation.block
+        operation.block = { [weak self] completion in
+            if let underlyingQueue = self?.underlyingQueue {
+                underlyingQueue.async {
+                    block(completion)
+                }
+            }else{
+                block(completion)
+            }
+        }
+        _queue.addOperation(operation)
+    }
 }
