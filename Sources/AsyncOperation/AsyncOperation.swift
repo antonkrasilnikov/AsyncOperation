@@ -139,3 +139,11 @@ open class AsyncOperationQueue {
         _queue.addOperation(operation)
     }
 }
+
+open class ThreadsSynchronizer {
+    public static func synced(_ lock: Any, closure: () -> ()) {
+        objc_sync_enter(lock)
+        closure()
+        objc_sync_exit(lock)
+    }
+}
